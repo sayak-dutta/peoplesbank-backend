@@ -12,6 +12,7 @@ public class Account {
 
     private String accountNumber;
 
+    private String accountType;
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     @JsonBackReference
@@ -33,6 +34,10 @@ public class Account {
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
+    }
+    public String getAccountType(){return accountType;}
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
     }
 
     public Double getBalance() {

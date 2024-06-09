@@ -1,5 +1,8 @@
 package com.example.peoplesbank.controller;
 
+import com.example.peoplesbank.dto.CustomerDto;
+import com.example.peoplesbank.dto.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PutMapping;
 
 
@@ -10,7 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-        import java.util.List;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -18,11 +22,29 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
-        Customer newCustomer = customerService.createCustomer(customer);
-        return ResponseEntity.ok(newCustomer);
+    public ResponseEntity<Response<CustomerDto>> registerCustomer(@RequestBody Customer customer) {
+        Response<CustomerDto> response = customerService.createCustomer(customer);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<Response<CustomerDto>> loginCustomer(@RequestBody Customer loginRequest) {
+        Response<CustomerDto> response = customerService.loginCustomer(loginRequest.getEmail(), loginRequest.getPassword());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+
+//    @PostMapping("/login")
+//    public ResponseEntity<CustomerDto> loginCustomer(@RequestBody Customer loginRequest) {
+//        CustomerDto customer = customerService.loginCustomer(loginRequest.getEmail(), loginRequest.getPassword());
+//        if (customer != null) {
+//            return ResponseEntity.ok(customer);
+//        } else {
+//            return ResponseEntity.status(401).body(null); // Unauthorized
+//        }
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
@@ -43,8 +65,11 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
+    public ResponseEntity<Response<String>> deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomer(id);
-        return ResponseEntity.noContent().build();
+        Response<String> response = new Response<>(LocalDateTime.now(), 200, "Customer deleted successfully", null);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
 }

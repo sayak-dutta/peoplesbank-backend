@@ -10,6 +10,8 @@ public class Beneficiary {
     private String name;
     private String accountNumber;
 
+    private String ifscCode;
+
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
@@ -34,6 +36,10 @@ public class Beneficiary {
     public String getAccountNumber() {
         return accountNumber;
     }
+
+    public String getIfscCode (){return  ifscCode;}
+
+    public void setIfscCode(String ifscCode){this.ifscCode= ifscCode;}
 
     public void setAccountNumber(String accountNumber) {
         this.accountNumber = accountNumber;
